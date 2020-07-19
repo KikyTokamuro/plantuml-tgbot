@@ -9,6 +9,9 @@ import (
 const (
 	// Plantuml character list
 	plantumlMap = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
+
+	// Plantuml URL
+	plantumlURL = "http://www.plantuml.com/plantuml"
 )
 
 // Encodes a string using the DEFLATE algorithm
@@ -47,7 +50,17 @@ func base64Encode(text []byte) string {
 	return string(base64buffer.Bytes())
 }
 
-func main() {
-	// test
-	fmt.Printf("~1%s\n", base64Encode(deflateEncode("@startuml\nB -> A : 111\n@enduml")))
+// Deflate + Base64
+func encodeText(text string) string {
+	deflate := deflateEncode(text)
+	base64 := base64Encode(deflate)
+
+	return base64
+}
+
+// Generating a link to a Plantuml diagram
+func genPlantumlLink(text string) string {
+	link := fmt.Sprintf("%s/png/~1%s", plantumlURL, encodeText(text))
+
+	return link
 }
